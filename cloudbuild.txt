@@ -1,0 +1,10 @@
+# se ejecuta solo una vez para hacer posibles los push a artifact registry
+gcloud auth configure-docker
+
+# cada vez que se hace algun cambio a la api para reconstruir la imagen
+docker build -t gcr.io/vocational-insight-api/vi-api:v0.1 .
+
+# para actualizar la imagen remota de la api en artifact registy
+docker push gcr.io/vocational-insight-api/vi-api:v0.1
+
+# ir gcp, cloud run, implementar nueva version, seleccionar la nueva imagen, actualizar

@@ -34,11 +34,17 @@ def create_app():
     from api.routes.region import region_bp
     from api.routes.vocational_test import vocational_test_bp
     from api.routes.careers import careers_bp
+    from api.routes.feedback import feedback_bp
+    from api.routes.reset_password import reset_pass_bp
+    from api.routes.news import news_bp
     app.register_blueprint(usuario_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(region_bp)
     app.register_blueprint(vocational_test_bp)
     app.register_blueprint(careers_bp)
+    app.register_blueprint(feedback_bp)
+    app.register_blueprint(reset_pass_bp)
+    app.register_blueprint(news_bp)
 
     return app
 

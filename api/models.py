@@ -29,6 +29,8 @@ class Noticias(db.Model):
     contenido = db.Column(db.Text)
     fecha_publicacion = db.Column(db.Date)
     link_noticia = db.Column(db.String(255))
+    imagen_noticia = db.Column(db.String(255))  # Para la URL de la imagen
+
 
 # Modelo Región
 class Region(db.Model):
@@ -94,10 +96,20 @@ class Recomendacion(db.Model):
 # Modelo Feedback
 class Feedback(db.Model):
     __tablename__ = 'feedback'
+    
     id_feedback = db.Column(db.Integer, primary_key=True)
     puntuacion = db.Column(db.Integer, db.CheckConstraint('puntuacion BETWEEN 1 AND 5'))
     comentario = db.Column(db.String(500))
+    fecha_feedback = db.Column(db.DateTime)
     id_recomendacion = db.Column(db.Integer, db.ForeignKey('recomendacion.id_recomendacion'))
+    
+    # Nueva columna para la relación con Usuario
+    id_usuario = db.Column(db.Integer, db.ForeignKey('usuario.id_usuario'))  
+    
+    # Relación con el modelo Usuario
+    usuario = db.relationship('Usuario', backref='feedbacks')
+
+
 
     # Relación con Recomendación
     recomendacion = db.relationship('Recomendacion', backref='feedbacks')

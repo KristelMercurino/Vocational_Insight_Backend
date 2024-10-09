@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS  # Importa CORS
 from dotenv import load_dotenv
 import os
 
@@ -10,6 +11,9 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+
+    # Habilita CORS para todos los orígenes y soporta credenciales si es necesario
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
     # Configuración de la base de datos con la URI proporcionada
     DB_USER = os.getenv("DB_USER")
@@ -37,6 +41,9 @@ def create_app():
     from api.routes.feedback import feedback_bp
     from api.routes.reset_password import reset_pass_bp
     from api.routes.news import news_bp
+    from api.routes.newsletter import newsletter_bp
+    from api.routes.subscription import suscription_bp
+
     app.register_blueprint(usuario_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(region_bp)
@@ -45,7 +52,7 @@ def create_app():
     app.register_blueprint(feedback_bp)
     app.register_blueprint(reset_pass_bp)
     app.register_blueprint(news_bp)
+    app.register_blueprint(newsletter_bp)
+    app.register_blueprint(suscription_bp)
 
     return app
-
-

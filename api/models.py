@@ -1,5 +1,6 @@
 from api import db
 from sqlalchemy.dialects.mysql import LONGTEXT
+from datetime import datetime
 
 # Modelo Carrera
 class Carrera(db.Model):
@@ -24,13 +25,23 @@ class Carrera(db.Model):
 # Modelo Noticias
 class Noticias(db.Model):
     __tablename__ = 'noticias'
+
     id_noticia = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(255), nullable=False)
-    contenido = db.Column(db.Text)
-    fecha_publicacion = db.Column(db.Date)
-    link_noticia = db.Column(db.String(255))
-    imagen_noticia = db.Column(db.String(255))  # Para la URL de la imagen
+    contenido = db.Column(db.Text, nullable=False)
+    fecha_publicacion = db.Column(db.DateTime, default=datetime.utcnow)
+    link_noticia = db.Column(db.String(255), nullable=True)
+    imagen_noticia = db.Column(db.String(255), nullable=True)
 
+    def to_dict(self):
+        return {
+            'id_noticia': self.id_noticia,
+            'titulo': self.titulo,
+            'contenido': self.contenido,
+            'fecha_publicacion': self.fecha_publicacion.isoformat(),  # Convertir fecha a formato JSON
+            'link_noticia': self.link_noticia,
+            'imagen_noticia': self.imagen_noticia
+        }
 
 # Modelo Región
 class Region(db.Model):
@@ -64,10 +75,11 @@ class Usuario(db.Model):
     ultima_actualizacion = db.Column(db.DateTime)
     creacion_usuario = db.Column(db.DateTime)
     fecha_desactivacion = db.Column(db.DateTime)
-
+    suscripcion_boletin = db.Column(db.Integer, default=0)
 
     # Relación con la tabla Región
     ciudad = db.relationship('Ciudad', backref='usuarios')
+    
 
 # Modelo Test Vocacional
 class TestVocacional(db.Model):
@@ -113,3 +125,15 @@ class Feedback(db.Model):
 
     # Relación con Recomendación
     recomendacion = db.relationship('Recomendacion', backref='feedbacks')
+
+
+  # Modelo Boletin Informativo
+class BoletinInformativo(db.Model):
+    __tablename__ = 'boletin_informativo'
+    
+    id_boletin = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    titulo = db.Column(db.String(255), nullable=False)
+    contenido = db.Column(db.Text, nullable=False)
+    fuente = db.Column(db.String(255))
+    link_mas_informacion = db.Column(db.String(255))
+    fecha_envio = db.Column(db.Date, default=datetime.utcnow)

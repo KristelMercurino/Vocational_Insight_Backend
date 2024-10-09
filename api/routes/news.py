@@ -11,7 +11,8 @@ def obtener_noticias(payload):
     # Consulta para obtener las 10 noticias más recientes, ordenadas por fecha de publicación descendente
     noticias = Noticias.query.order_by(Noticias.fecha_publicacion.desc()).limit(10).all()
     
+    # Convertir las noticias en una lista de diccionarios
+    noticias_serializadas = [noticia.to_dict() for noticia in noticias]
+    
     # Devolver las noticias en formato JSON
-    return jsonify(noticias), 200
-
-
+    return jsonify(noticias_serializadas), 200
